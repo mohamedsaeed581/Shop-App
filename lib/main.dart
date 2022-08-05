@@ -43,7 +43,7 @@ MyApp({this.startWidget, this.isDark});
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context) => ShopCubit()..getHomeData(),),
+        BlocProvider(create: (BuildContext context) => ShopCubit()..getHomeData()..getCategoriesData(),),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',

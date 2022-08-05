@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder/conditional_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/layout/bloc/cubit.dart';
 import 'package:untitled/layout/bloc/states.dart';
+import 'package:untitled/models/categories_model.dart';
 import 'package:untitled/models/home_model.dart';
 import 'package:untitled/styles/colors.dart';
 
@@ -18,8 +20,8 @@ class ProductsScreen extends StatelessWidget {
         return Scaffold(
           backgroundColor: Colors.white,
 body: ConditionalBuilder(
-    condition: ShopCubit.get(context).homeModel != null,
-    builder: (context) => productsBuilder(ShopCubit.get(context).homeModel),
+    condition: ShopCubit.get(context).homeModel != null && ShopCubit.get(context).categoriesModel != null,
+    builder: (context) => productsBuilder(ShopCubit.get(context).homeModel, ShopCubit.get(context).categoriesModel),
   fallback:(context) => Center(child: CircularProgressIndicator())  ,
 ),
         );
@@ -27,14 +29,14 @@ body: ConditionalBuilder(
     );
   }
 
-  Widget productsBuilder(HomeModel model) => SingleChildScrollView(
+  Widget productsBuilder(HomeModel model, CategoriesModel categoriesModel) => SingleChildScrollView(
     physics: BouncingScrollPhysics(),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CarouselSlider(items: model.data.banners.map((e) => Image(image: NetworkImage('${e.image}'),width: double.infinity,fit: BoxFit.cover,)).toList(),
             options: CarouselOptions(
-              height: 250,
+              height: 160,
               initialPage: 0,
               viewportFraction: 1.00,
               enableInfiniteScroll: true,
@@ -46,6 +48,39 @@ body: ConditionalBuilder(
               scrollDirection: Axis.horizontal,
 
             ),),
+
+        SizedBox(height: 10,),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Categories',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+              ),
+              ),
+              SizedBox(height: 10,),
+              Container(
+                height: 100,
+                child: ListView.separated(
+                  physics: BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                     itemBuilder: (context,index) => buildCategoryItem(categoriesModel.data.data[index]),
+                    separatorBuilder: (context,index) => SizedBox(width: 10,),
+                    itemCount: categoriesModel.data.data.length),
+              ),
+              SizedBox(height: 20,),
+              Text('Products',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ),
         SizedBox(height: 10,),
         Container(
           color: Colors.grey[300],
@@ -62,6 +97,36 @@ body: ConditionalBuilder(
       ],
     ),
   );
+  Widget buildCategoryItem(DataModel model) => Container(
+    height: 100,
+    width: 100,
+    child: Stack(
+      alignment: AlignmentDirectional.bottomCenter,
+      children: [
+        Image(
+          image: NetworkImage(model.image),
+          height: 100,
+          width: 100,
+          fit: BoxFit.cover,
+        ),
+        Container(
+          color: Colors.black.withOpacity(.8),
+          width: double.infinity,
+          child: Text(model.name,
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: Colors.white,
+
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+
+
   Widget buildGridProduct(ProductsModel model ) => Container(
     color: Colors.white,
     child: Column(

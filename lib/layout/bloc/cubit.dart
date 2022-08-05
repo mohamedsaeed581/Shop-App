@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:untitled/components/constant.dart';
 import 'package:untitled/layout/bloc/states.dart';
+import 'package:untitled/models/categories_model.dart';
 import 'package:untitled/models/home_model.dart';
 import 'package:untitled/modules/categories/categories_screen.dart';
 import 'package:untitled/modules/favorites/favorites.dart';
@@ -48,5 +49,19 @@ void getHomeData(){
     ShopErrorHomeDataState();
   });
 
+}
+
+CategoriesModel categoriesModel;
+
+void getCategoriesData() {
+  DioHelper.getData(
+      url: GET_CATEGORIES
+  
+  ).then((value) {
+    categoriesModel = CategoriesModel.fromJson(value.data);
+    emit(ShopSuccessCategoriesState());
+  }).catchError((error){
+    emit(ShopErrorCategoriesState());
+  });
 }
 }
