@@ -46,7 +46,7 @@ ThemeData lightTheme = ThemeData(
 
   // floatingActionButtonTheme:
   // FloatingActionButtonThemeData(backgroundColor: defaultColor),
-  // scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: Colors.white,
   appBarTheme: const AppBarTheme(
     titleSpacing: 20,
     systemOverlayStyle: SystemUiOverlayStyle(

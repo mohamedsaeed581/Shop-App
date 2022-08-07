@@ -43,13 +43,14 @@ MyApp({this.startWidget, this.isDark});
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (BuildContext context) => ShopCubit()..getHomeData()..getCategoriesData(),),
+        BlocProvider(create: (BuildContext context) => ShopCubit()..getHomeData()..getCategoriesData()..getFavoritesData()..getUserData(),),
       ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: lightTheme,
         darkTheme: darkTheme,
         home:  startWidget,
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
